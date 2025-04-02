@@ -1,0 +1,8 @@
+#
+chroma
+torch
+transformers
+pillow
+face_recognition
+pymilvus
+
