@@ -23,13 +23,13 @@ class ImageImbedding:
         }
         for i, v in enumerate(face_encodings):
             # print('vector v has', v.shape, 'shape', v)
-            v_768 = expand_to_768_zero_padding(v)
+            # v_768 = expand_to_768_zero_padding(v)
             # print(v.shape, v_768.shape)
             top, right, bottom, left = face_locations[i]
             face = {
                 "id": getID(),
                 "imgid": imgid,
-                "vector": v_768,
+                "vector": v,
                 "left": left,
                 "top": top,
                 "right": right,

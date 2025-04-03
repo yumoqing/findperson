@@ -2,13 +2,25 @@ from appPublic.jsonConfig import getConfig
 from pymilvus import MilvusClient, DataType, FieldSchema, CollectionSchema
 
 class MilvusVectorDB:
-    def __init__(self, orgid, dimension=768):
+    def __init__(self, orgid, dimension=128):
         config = getConfig()
         dbname = f'{config.vectordb_path}/{orgid}.db'
         self.orgid = orgid
         self.dbname = dbname
         self.dimension = dimension
         self.client = MilvusClient(dbname)
+
+    def create_vector_index(self, tblname):
+        index_params = [{
+            "index_type": "IVF_FLAT",  # Choose index type
+            "field_name":"vector",
+            "index_name":"vector_index",
+            "metric_type": "L2",  # Distance metric: L2 (Euclidean) or IP (Inner Product)
+            "params": {"nlist": 128}  # Number of clusters for IVF
+        }]
+        self.client.flush(tblname)
+        self.client.create_index(tblname, index_params)
+        print("index created")
 
     def create_table_if_not_exists(self, tblname):
         if not self.client.has_collection(collection_name=tblname):
@@ -32,15 +44,20 @@ class MilvusVectorDB:
                     schema=schema
             )
 
-    def add(self, tblname, ns):
+    def add(self, tblname, ns,flush=False):
         self.create_table_if_not_exists(tblname)
-        return self.client.insert(collection_name=tblname, data=ns)
+        ret = self.client.insert(collection_name=tblname, data=ns)
+        if flush:
+            self.create_vector_index(tblname)
+        return ret
 
     def search_by_vector(self, tblname, vector, limit=5):
         self.create_table_if_not_exists(tblname)
         return self.client.search(
                 collection_name=tblname,
+                anns_field="vector",
                 data=[vector],
+                output_fields=["imgid", "top","right","bottom", "left", "userid" ],
                 limit=limit
         )
 
