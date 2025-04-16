@@ -34,6 +34,7 @@ class ImageFaces:
         v = self.ii.image2faces(image_path)
         for face in v['faces']:
             ret = db.search_by_vector('faces', face['vector'])
+            ret = [d for d in ret.pop()]
             face['similarities'] = ret
         return v
 
@@ -56,9 +57,8 @@ if __name__ == '__main__':
         print(v['id'], v['image'])
         for face in v['faces']:
             t = face['similarities']
-            print(f'{face["id"]=}, {face["imgid"]}, {t=},{type(t)}, {t.count}, {dir(t)}')
-            for d in t.pop():
-                print(f'{d=}, {type(d)},{dir(d)}')
+            for d in t:
+                print(f'{d=}')
             print(f"{face['id']=},{face['imgid']=}")
 
         

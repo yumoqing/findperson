@@ -31,6 +31,7 @@ class MilvusVectorDB:
                     FieldSchema(name='vector', dtype=DataType.FLOAT_VECTOR, 
                                         dim=self.dimension, description='vector'),
                     FieldSchema(name='imgid', dtype=DataType.VARCHAR, max_length=34),
+                    FieldSchema(name='imagepath', dtype=DataType.VARCHAR, max_length=500),
                     FieldSchema(name='top', dtype=DataType.INT32),
                     FieldSchema(name='left', dtype=DataType.INT32),
                     FieldSchema(name='right', dtype=DataType.INT32),
@@ -57,7 +58,7 @@ class MilvusVectorDB:
                 collection_name=tblname,
                 anns_field="vector",
                 data=[vector],
-                output_fields=["imgid", "top","right","bottom", "left", "userid" ],
+                output_fields=["imgid", "imagepath", "top","right","bottom", "left", "userid" ],
                 limit=limit
         )
 

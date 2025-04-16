@@ -7,6 +7,11 @@ def expand_to_768_zero_padding(embedding):
     return np.pad(embedding, (0, 768 - 128), mode="constant")
 
 class ImageImbedding:
+    def get_image_faces_vector(self, image_path):
+        image = face_recognition.load_image_file(image_path)
+        face_encodings = face_recognition.face_encodings(image, face_locations)  # 计算 128 维特征
+        return face_encodings
+        
     def image2faces(self, image_path, imgid=None):
         image = face_recognition.load_image_file(image_path)
 
@@ -29,6 +34,7 @@ class ImageImbedding:
             face = {
                 "id": getID(),
                 "imgid": imgid,
+                "imagepath":image_path,
                 "vector": v,
                 "left": left,
                 "top": top,
