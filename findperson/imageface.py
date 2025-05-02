@@ -3,8 +3,8 @@ import face_recognition
 from PIL import Image
 from appPublic.jsonConfig import getConfig
 
-from image_imbedding import ImageImbedding
-from vectordb import MilvusVectorDB
+from .image_imbedding import ImageImbedding
+from .vectordb import MilvusVectorDB
 
 class ImageFaces:
     """
