@@ -1,5 +1,0 @@
-#
-pillow
-face_recognition
-pymilvus
-
